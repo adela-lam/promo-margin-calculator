@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Promo Margin Calculator · Adela Lam</title>
+<meta name="description" content="Will this discount actually make money? Compare offers, see the sales lift each one needs to break even, and find the deepest discount you can afford.">
+<meta property="og:title" content="Promo Margin Calculator">
+<meta property="og:description" content="See the sales lift a discount needs just to break even, and compare % off, $ off and gift-with-purchase offers. Built by Adela Lam.">
+<meta property="og:image" content="/og-image.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cardo:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="/">Margin<span>Calculator</span></a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="https://github.com/adela-lam/promo-margin-calculator" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://adelawlam.wordpress.com" target="_blank" rel="noopener">Adela Lam ↗</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow"><span class="rule"></span>Open-source marketing tool</div>
+    <h1>Will this discount actually <em>make money?</em></h1>
+    <p class="lede">Every discount lowers what you earn per sale, so the promo has to sell more just to stand still. Enter your numbers to see how much more, compare up to three offers side by side, and find the deepest discount you can afford.</p>
+  </section>
+
+  <section class="card" aria-labelledby="p-h">
+    <div class="card-top">
+      <div><h2 id="p-h" class="card-h">1. Your product</h2><p class="card-sub">Use one hero product, or the average across the products on promo.</p></div>
+      <button class="share" id="share" type="button">Copy link to these numbers</button>
+    </div>
+    <div class="fields">
+      <div class="field"><label for="price">Regular price</label><div class="inp"><span>$</span><input id="price" type="number" min="0" step="any"></div></div>
+      <div class="field"><label for="unitCost">Product cost</label><div class="inp"><span>$</span><input id="unitCost" type="number" min="0" step="any"></div><small>What one unit costs you to make or buy</small></div>
+      <div class="field"><label for="variableCost">Cost per order</label><div class="inp"><span>$</span><input id="variableCost" type="number" min="0" step="any"></div><small>Shipping, packaging, payment fees</small></div>
+      <div class="field"><label for="baselineUnits">Units you'd sell anyway</label><div class="inp"><input id="baselineUnits" type="number" min="1" step="1"><span class="suf">units</span></div><small>Over the promo period, with no promo</small></div>
+      <div class="field"><label for="fixedCost">Promo spend</label><div class="inp"><span>$</span><input id="fixedCost" type="number" min="0" step="any"></div><small>Extra ads, creative, agency fees</small></div>
+    </div>
+    <div class="unit-strip" id="unit-strip"></div>
+  </section>
+
+  <section class="card" aria-labelledby="o-h">
+    <h2 id="o-h" class="card-h">2. Compare offers</h2>
+    <p class="card-sub">Set each offer and the sales lift you expect it to drive. Results update as you type.</p>
+    <div class="offers" id="offers"></div>
+  </section>
+
+  <section class="card" aria-labelledby="c-h">
+    <h2 id="c-h" class="card-h">Profit vs. sales lift</h2>
+    <p class="card-sub">Extra profit compared with not running a promo. The bottom axis is the sales lift. Each offer starts making money where its line crosses $0.</p>
+    <div id="legend" class="legend"></div>
+    <div id="chart" class="chart"></div>
+  </section>
+
+  <section class="card" aria-labelledby="l-h">
+    <h2 id="l-h" class="card-h">3. Discount ladder</h2>
+    <p class="card-sub">How much more you'd need to sell at each % off, just to earn the same profit.</p>
+    <div class="split">
+      <div class="table-wrap" style="margin-top:0"><table class="ladder" id="ladder"></table></div>
+      <div class="afford">
+        <div class="field"><label for="ladderLift">If a promo lifts sales by</label><div class="inp" style="max-width:180px"><input id="ladderLift" type="number" min="0" step="1"><span class="suf">%</span></div></div>
+        <div style="margin-top:18px"><div class="big" id="afford"></div><div class="lbl" style="font-size:13px;color:var(--ink-2);margin-top:6px">is the deepest % off that still breaks even</div></div>
+        <p class="line" id="afford-note" style="font-size:13px;color:var(--ink-2);line-height:1.55;margin:14px 0 0"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="how">
+    <h2>How it works</h2>
+    <p>Each unit you sell earns a <strong>contribution</strong>: the price, minus product cost, minus the cost of getting the order to the customer. An offer shrinks that contribution, so the promo needs more units, plus enough to cover promo spend, to earn what you'd have made anyway.</p>
+    <div class="formula">
+      contribution per unit = price − product cost − cost per order<br>
+      units needed = (units you'd sell anyway × regular contribution + promo spend) ÷ promo contribution<br>
+      sales lift needed = units needed ÷ units you'd sell anyway − 1
+    </div>
+    <h3>Worked example</h3>
+    <p>A $120 product costs $48 to make and $8 to ship, so it earns <strong>$64</strong> per sale. At 20% off it sells for $96 and earns <strong>$40</strong>. You'd sell 1,000 units anyway (1,000 × $64 = <strong>$64,000</strong> profit) and spend $2,000 on the promo.</p>
+    <div class="formula">
+      units needed = (1,000 × $64 + $2,000) ÷ $40 = 1,650 units → a 65% sales lift<br>
+      check: 1,650 × $40 − $2,000 = $64,000 ✓ (same as no promo)
+    </div>
+    <h3>Why a gift can beat a discount</h3>
+    <p>A free gift worth $40 to the customer might cost you $12. That's $40 of perceived value for $12 of margin, while $40 off costs the full $40. Fewer, smarter offers protect margin.</p>
+    <h3>Further reading</h3>
+    <ul class="ticks">
+      <li><a href="https://hbr.org/1992/09/managing-price-gaining-profit" target="_blank" rel="noopener">Marn &amp; Rosiello, "Managing Price, Gaining Profit", Harvard Business Review (1992)</a>: across 2,463 companies, a 1% price improvement lifted operating profit by about 11%.</li>
+      <li><a href="https://doi.org/10.1287/mksc.14.3.G122" target="_blank" rel="noopener">Blattberg, Briesch &amp; Fox, "How Promotions Work", Marketing Science (1995)</a>: a review of what promotions do and don't do for sales.</li>
+    </ul>
+    <h3>Limits</h3>
+    <p>This is a planning model. It doesn't count customers pulling purchases forward, shoppers who would have bought at full price anyway, or the long-term value of new customers a promo brings in. Treat it as the floor a promo has to clear.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">Built by <a href="https://adelawlam.wordpress.com" target="_blank" rel="noopener">Adela Lam</a> · Brand &amp; marketing leader · Example numbers are made up</div>
+</footer>
+<div id="tip" class="tip" role="tooltip" hidden></div>
+<script type="module" src="/app.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

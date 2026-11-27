@@ -1,0 +1,11 @@
+{
+  "name": "promo-margin-calculator",
+  "version": "1.0.0",
+  "description": "Will this discount make money? Break-even sales lift, offer comparison and a discount ladder for promo planning.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "npx --yes serve public -l 3000",
+    "test": "node --test"
+  }
+}
